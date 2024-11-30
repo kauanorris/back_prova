@@ -26,7 +26,7 @@ class UserService{
     }
 
     //Método para retornar todos os usuarios 
-    async findAll(){
+    async findAll(){    
         try{
             const AllUsers = await this.User.findAll();
             return AllUsers? AllUsers : null;
@@ -48,26 +48,26 @@ class UserService{
 
     }
 
-    async login(email, password){
-        try{
-            const User = await this.User.findOne({
-                where : {email}
-            });
-            if(User){
-                //preencher depois, porque a senha precisa ser criptografada
-                //Gerar o token do user 
-                const token = await auth.generateToken(User);
-                User.dataValues.Token = token;
-                User.dataValues.password = '';
+    async login(email, password) {
+        try {
+          const user = await this.User.findOne({ where: { email } });
+          if (user) {
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (isPasswordValid) {
+              // Gerar o token do usuário
+              const token = await auth.generateToken(user); 
+              user.dataValues.token = token;
+              user.dataValues.password = '';
+              return user;
+            } else {
+              return null;
             }
-            return User? User:null;
+          }
+          return null;
+        } catch (error) {
+          throw error;
         }
-        catch(error){
-            throw error;
-        }
-        //Se o usuario existe, ver se a senha esta ok
-        
-    }
+      }
     
 }
 

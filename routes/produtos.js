@@ -4,6 +4,8 @@ const ProdutosServices = require('../services/produtosServices');
 const db = require('../models');
 const produtosServices = new ProdutosServices(db.Produtos);
 
+const auth = require('../auth')
+
 router.post('/', async (req, res) => {
   try {
     const { nome, descricao, preco, estoque } = req.body;
