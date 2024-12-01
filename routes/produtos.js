@@ -6,7 +6,7 @@ const produtosServices = new ProdutosServices(db.Produtos);
 
 const auth = require('../auth')
 
-router.post('/', async (req, res) => {
+router.post('/', auth.verifyToken, async (req, res) => {
   try {
     const { nome, descricao, preco, estoque } = req.body;
     const newProduto = await produtosServices.create({ nome, descricao, preco, estoque });
@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', auth.verifyToken, async (req, res) => {
   try {
     const produtos = await produtosServices.findAll();
     res.status(200).json(produtos);
@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth.verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
     const { nome, descricao, preco, estoque } = req.body;
@@ -37,7 +37,7 @@ router.put('/:id', async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth.verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
     await produtosServices.delete(id);

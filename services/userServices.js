@@ -58,7 +58,10 @@ class UserService{
               const token = await auth.generateToken(user); 
               user.dataValues.token = token;
               user.dataValues.password = '';
-              return user;
+              return {
+                        user: User,
+                        token: token
+                    };
             } else {
               return null;
             }
@@ -67,7 +70,7 @@ class UserService{
         } catch (error) {
           throw error;
         }
-      }
+      } 
     
 }
 
